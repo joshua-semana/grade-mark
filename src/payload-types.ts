@@ -12,7 +12,9 @@ export interface Config {
   };
   collections: {
     users: User;
-    'grade-levels': GradeLevel;
+    levels: Level;
+    'level-groups': LevelGroup;
+    students: Student;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -20,7 +22,9 @@ export interface Config {
   db: {
     defaultIDType: string;
   };
-  globals: {};
+  globals: {
+    settings: Setting;
+  };
   locale: null;
   user: User & {
     collection: 'users';
@@ -63,12 +67,37 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "grade-levels".
+ * via the `definition` "levels".
  */
-export interface GradeLevel {
+export interface Level {
   id: string;
   name: string;
-  visible?: ('true' | 'false') | null;
+  group: string | LevelGroup;
+  viewOrder: number;
+  url?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "level-groups".
+ */
+export interface LevelGroup {
+  id: string;
+  name: string;
+  viewOrder: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "students".
+ */
+export interface Student {
+  id: string;
+  firstName: string;
+  lastName: string;
+  gradeGroup: string | Level;
   updatedAt: string;
   createdAt: string;
 }
@@ -84,8 +113,16 @@ export interface PayloadLockedDocument {
         value: string | User;
       } | null)
     | ({
-        relationTo: 'grade-levels';
-        value: string | GradeLevel;
+        relationTo: 'levels';
+        value: string | Level;
+      } | null)
+    | ({
+        relationTo: 'level-groups';
+        value: string | LevelGroup;
+      } | null)
+    | ({
+        relationTo: 'students';
+        value: string | Student;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -128,6 +165,20 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "settings".
+ */
+export interface Setting {
+  id: string;
+  schoolInformation: {
+    schoolName: string;
+    schoolAcronym: string;
+    schoolAddress?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

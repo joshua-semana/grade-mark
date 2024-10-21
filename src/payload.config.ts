@@ -7,7 +7,10 @@ import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 
 import { Users } from './collections/Users'
-import { GradeLevels } from './collections/GradeLevels'
+import { Students } from './collections/Students'
+import Settings from './globals/Settings'
+import LevelGroups from './collections/LevelGroups'
+import Levels from './collections/Levels'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -21,10 +24,12 @@ export default buildConfig({
   },
   collections: [
     Users,
-    GradeLevels
+    Levels,
+    LevelGroups,
+    Students
   ],
   globals: [
-
+    Settings
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
